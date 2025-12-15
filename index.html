@@ -1,46 +1,57 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>FnS Ventures Attendance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FnS Ventures Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
-  <h2>FnS Ventures – Employee Attendance</h2>
+    <h2>FnS Ventures – Employee Attendance</h2>
 
-  <form id="attForm">
-    <input type="text" id="empId" placeholder="Employee ID" required><br><br>
-    <input type="text" id="empName" placeholder="Employee Name" required><br><br>
+    <form id="attForm">
+        <input type="text" id="empId" placeholder="Employee ID" required><br><br>
+        <input type="text" id="empName" placeholder="Employee Name" required><br><br>
+        <input type="password" id="pin" placeholder="PIN" required><br><br>
 
-    <input type="file" id="photo" accept="image/*" capture="camera" required><br><br>
+        <select id="type" required>
+            <option value="">Select</option>
+            <option value="IN">IN</option>
+            <option value="OUT">OUT</option>
+        </select><br><br>
 
-    <button type="submit">Mark Attendance</button>
-  </form>
+        <input type="file" id="photo" accept="image/*" capture="camera" required><br><br>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxIPErVacmv7cxERvlLPfmBvFn9ecSDcuyCYBwoBksc33QUiN6ZXfQ1040QR1gcnAOD/exec";
+        <button type="submit">Submit Attendance</button>
+    </form>
 
-    document.getElementById("attForm").addEventListener("submit", function(e){
-      e.preventDefault();
 
-      navigator.geolocation.getCurrentPosition(function(pos){
-        let reader = new FileReader();
-        reader.onload = function(){
-          fetch(scriptURL, {
-            method: "POST",
-            body: JSON.stringify({
-              empId: empId.value,
-              empName: empName.value,
-              photo: reader.result,
-              lat: pos.coords.latitude,
-              lng: pos.coords.longitude,
-              address: "",
-              device: navigator.userAgent
-            })
-          }).then(() => alert("Attendance Marked Successfully"));
-        }
-        reader.readAsDataURL(photo.files[0]);
-      });
-    });
-  </script>
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzDDKpnhrM0u30Esaxc_5rj6ssZQAcZNgJsjL3btI50hM9BatT5uKgELI5qS-Y5AB7H/exec";
+
+        document.getElementById("attForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                let reader = new FileReader();
+                reader.onload = function () {
+                    fetch(scriptURL, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            empId: empId.value,
+                            empName: empName.value,
+                            photo: reader.result,
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                            address: "",
+                            device: navigator.userAgent
+                        })
+                    }).then(() => alert("Attendance Marked Successfully"));
+                }
+                reader.readAsDataURL(photo.files[0]);
+            });
+        });
+    </script>
 </body>
+
 </html>
