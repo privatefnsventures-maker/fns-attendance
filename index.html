@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FnS Ventures Attendance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h2>FnS Ventures – Employee Attendance</h2>
+
+  <form id="attForm">
+    <input type="text" id="empId" placeholder="Employee ID" required><br><br>
+    <input type="text" id="empName" placeholder="Employee Name" required><br><br>
+
+    <input type="file" id="photo" accept="image/*" capture="camera" required><br><br>
+
+    <button type="submit">Mark Attendance</button>
+  </form>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw7rfUaHVp_grp7j0FYtnuFJgjAtR8-mtOi98OYKWECbHq0eqN3NDwFmzEzfL2lkVDd/exec";
+
+    document.getElementById("attForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      navigator.geolocation.getCurrentPosition(function(pos){
+        let reader = new FileReader();
+        reader.onload = function(){
+          fetch(scriptURL, {
+            method: "POST",
+            body: JSON.stringify({
+              empId: empId.value,
+              empName: empName.value,
+              photo: reader.result,
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude,
+              address: "",
+              device: navigator.userAgent
+            })
+          }).then(() => alert("Attendance Marked Successfully"));
+        }
+        reader.readAsDataURL(photo.files[0]);
+      });
+    });
+  </script>
+</body>
+</html>
