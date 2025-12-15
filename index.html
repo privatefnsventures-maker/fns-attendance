@@ -11,47 +11,46 @@
 
     <form id="attForm">
         <input type="text" id="empId" placeholder="Employee ID" required><br><br>
-        <input type="text" id="empName" placeholder="Employee Name" required><br><br>
-        <input type="password" id="pin" placeholder="PIN" required><br><br>
 
         <select id="type" required>
-            <option value="">Select</option>
+            <option value="">IN / OUT</option>
             <option value="IN">IN</option>
             <option value="OUT">OUT</option>
         </select><br><br>
 
         <input type="file" id="photo" accept="image/*" capture="camera" required><br><br>
 
-        <button type="submit">Submit Attendance</button>
+        <button type="submit">Submit</button>
     </form>
 
 
+
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzDDKpnhrM0u30Esaxc_5rj6ssZQAcZNgJsjL3btI50hM9BatT5uKgELI5qS-Y5AB7H/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbwn8wI_XE5GczMwlVvnm3UDkW_Bo76nLzasYnLZNKfUkmzpP-Gm-gZo1OLc3nSwXXGm/exec";
 
-        document.getElementById("attForm").addEventListener("submit", function (e) {
-            e.preventDefault();
+document.getElementById("attForm").addEventListener("submit", e => {
+  e.preventDefault();
 
-            navigator.geolocation.getCurrentPosition(function (pos) {
-                let reader = new FileReader();
-                reader.onload = function () {
-                    fetch(scriptURL, {
-                        method: "POST",
-                        body: JSON.stringify({
-                            empId: empId.value,
-                            empName: empName.value,
-                            photo: reader.result,
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude,
-                            address: "",
-                            device: navigator.userAgent
-                        })
-                    }).then(() => alert("Attendance Marked Successfully"));
-                }
-                reader.readAsDataURL(photo.files[0]);
-            });
-        });
-    </script>
+  navigator.geolocation.getCurrentPosition(pos => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({
+          empId: empId.value,
+          type: type.value,
+          photo: reader.result,
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          device: navigator.userAgent
+        })
+      }).then(() => alert("Done"));
+    };
+    reader.readAsDataURL(photo.files[0]);
+  });
+});
+</script>
+
 </body>
 
 </html>
